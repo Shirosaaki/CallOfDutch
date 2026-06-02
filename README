@@ -1,0 +1,118 @@
+# Call of Dutch
+
+## Overview
+
+**Call of Dutch** is a card-based roguelite inspired by the classic Dutch card game.
+
+The core idea is simple: each victory grants the player more information and strategic control over their deck, while each defeat increases the risk of losing everything. As the run progresses, both the player's deck complexity and the AI difficulty increase, creating a constant balance between risk and reward.
+
+## Technical Stack
+
+* C++23
+* SDL3
+
+## Gameplay
+
+A run consists of a sequence of matches against increasingly difficult AI opponents.
+
+### Starting a Run
+
+At the beginning of a run:
+
+* A match starts immediately.
+* The player receives a random set of cards.
+* Only part of the deck is revealed.
+
+### Progression System
+
+#### First Victory
+
+If the player wins the first match:
+
+* They may keep one of the first two revealed cards.
+* All remaining cards are randomized for the next match.
+
+#### Second Victory
+
+If the player wins again:
+
+* A third card, previously hidden, is revealed.
+* The player chooses between:
+
+  * The second revealed card.
+  * The newly revealed third card.
+* The selected card becomes permanently known.
+
+At this stage, the player always knows their first and second card positions.
+
+#### Third Victory
+
+If the player wins a third consecutive match:
+
+* A new card is added to the deck.
+* A random card among the previously unrevealed cards is selected.
+* The player decides whether this card is placed in position 1 or position 2.
+
+### Endless Progression
+
+From the fourth victory onward:
+
+* Each victory adds one additional card.
+* The player may modify their known cards depending on the revealed information.
+* AI opponents become progressively stronger.
+
+### Defeat Conditions
+
+Each defeat removes one card from the player's deck.
+
+If the player is reduced to **4 cards** and loses a match, the run ends immediately.
+
+## Objective
+
+Survive as long as possible by building knowledge of your deck, adapting to increasing difficulty, and making optimal decisions after each victory.
+
+## Architecture
+
+```
+.
+├── assets
+│   ├── audio
+│   ├── fonts
+│   └── textures
+├── CMakeLists.txt
+├── LICENSE
+├── README
+└── src
+    ├── core
+    │   ├── game.cpp
+    │   ├── game.hpp
+    │   ├── StateManager.cpp
+    │   └── StateManager.hpp
+    ├── engine
+    │   ├── InputManager.cpp
+    │   ├── InputManager.hpp
+    │   ├── Renderer.cpp
+    │   ├── Renderer.hpp
+    │   ├── Window.cpp
+    │   └── Window.hpp
+    ├── game
+    │   ├── Board.cpp
+    │   ├── Board.hpp
+    │   ├── Card.cpp
+    │   ├── Card.hpp
+    │   ├── Deck.cpp
+    │   ├── Deck.hpp
+    │   ├── Player.cpp
+    │   └── Player.hpp
+    ├── main.cpp
+    ├── roguelike
+    │   ├── Encounter.cpp
+    │   ├── Encounter.hpp
+    │   ├── RunManager.cpp
+    │   └── RunManager.hpp
+    └── ui
+        ├── Button.cpp
+        ├── Button.hpp
+        ├── CardVisual.cpp
+        └── CardVisual.hpp
+```
